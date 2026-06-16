@@ -1,5 +1,6 @@
 package com.proyecto.pedido_service.controller;
 
+import com.proyecto.pedido_service.DTO.PedidoDTO;
 import com.proyecto.pedido_service.model.Pedido;
 import com.proyecto.pedido_service.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,21 +18,22 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api/pedidos")
 @Tag(name = "Pedidos", description = "Operaciones de la central de pedidos")
 public class PedidoController {
+
     @Autowired
     private PedidoService service;
 
     @GetMapping
     @Operation(summary = "Obtener todos los pedidos")
-    public List<Pedido> listarTodos() {
+    public List<PedidoDTO> listarTodos() {
         return service.obtenerTodos();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener un pedido por ID con enlaces HATEOAS")
-    public EntityModel<Pedido> obtenerPedido(@PathVariable Integer id) {
-        Pedido pedido = service.buscarPorId(id);
+    public EntityModel<PedidoDTO> obtenerPedido(@PathVariable Integer id) {
+        PedidoDTO pedidoDTO = service.buscarPorId(id);
 
-        return EntityModel.of(pedido,
+        return EntityModel.of(pedidoDTO,
                 linkTo(methodOn(PedidoController.class).obtenerPedido(id)).withSelfRel(),
                 linkTo(methodOn(PedidoController.class).listarTodos()).withRel("todos-los-pedidos")
         );
@@ -39,7 +41,7 @@ public class PedidoController {
 
     @PostMapping
     @Operation(summary = "Crear un nuevo pedido")
-    public Pedido crearPedido(@RequestBody Pedido pedido) {
+    public PedidoDTO crearPedido(@RequestBody Pedido pedido) {
         return service.guardar(pedido);
     }
 }
