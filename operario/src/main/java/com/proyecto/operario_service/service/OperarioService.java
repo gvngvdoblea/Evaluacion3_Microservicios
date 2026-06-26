@@ -1,30 +1,44 @@
 package com.proyecto.operario_service.service;
 
+import com.proyecto.operario_service.DTO.OperarioDTO;
 import com.proyecto.operario_service.model.Operario;
 import com.proyecto.operario_service.repository.OperarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OperarioService {
+
     @Autowired
     private OperarioRepository repository;
 
-    public List<Operario> obtenerTodos() {
-        return repository.findAll();
-    }
-
-    public Operario buscarPorId(Integer id) {
-        Optional<Operario> operario = repository.findById(id);
-        if (operario.isPresent()) {
-            return operario.get();
+    public List<OperarioDTO> obtenerTodos() {
+        List<OperarioDTO> listaDTOs = new ArrayList<>();
+        for (Operario o : repository.findAll()) {
+            listaDTOs.add(convertirADTO(o));
         }
-        throw new RuntimeException("Operario no encontrado");
+        return listaDTOs;
     }
 
-    public Operario guardar(Operario operario) {
-        return repository.save(operario);
+    public OperarioDTO buscarPorId(Integer id) {
+        Operario operario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Operario no encontrado"));
+        return convertirADTO(operario);
+    }
+
+    public OperarioDTO guardar(Operario operario) {
+        Operario guardado = repository.save(operario);
+        return convertirADTO(guardado);
+    }
+
+    private OperarioDTO convertirADTO(Operario operario) {
+        OperarioDTO dto = new OperarioDTO();
+        dto.setId(operario.getId());
+        dto.setNombre(operario.getNombre());
+        dto.setTurno(operario.getTurno());
+        return dto;
     }
 }

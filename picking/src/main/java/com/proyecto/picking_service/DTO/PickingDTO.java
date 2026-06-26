@@ -1,0 +1,11 @@
+package com.proyecto.picking_service.DTO;
+
+import lombok.Data;
+
+@Data
+public class PickingDTO {
+    private Integer id;
+    private String estado;
+    private PedidoDTO pedido;
+    private OperarioDTO operario;
+}

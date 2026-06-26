@@ -1,24 +1,45 @@
 package com.proyecto.cliente_service.service;
 
+import com.proyecto.cliente_service.DTO.ClienteDTO;
 import com.proyecto.cliente_service.model.Cliente;
 import com.proyecto.cliente_service.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClienteService {
+
     @Autowired
     private ClienteRepository repository;
 
-    public List<Cliente> obtenerTodos() { return repository.findAll(); }
-
-    public Cliente buscarPorId(Integer id) {
-        Optional<Cliente> cliente = repository.findById(id);
-        if (cliente.isPresent()) return cliente.get();
-        throw new RuntimeException("Cliente no encontrado");
+    public List<ClienteDTO> obtenerTodos() {
+        List<ClienteDTO> listaDTOs = new ArrayList<>();
+        for (Cliente c : repository.findAll()) {
+            listaDTOs.add(convertirADTO(c));
+        }
+        return listaDTOs;
     }
 
-    public Cliente guardar(Cliente cliente) { return repository.save(cliente); }
+    public ClienteDTO buscarPorId(Integer id) {
+        Cliente cliente = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        return convertirADTO(cliente);
+    }
+
+    public ClienteDTO guardar(Cliente nuevoCliente) {
+        Cliente guardado = repository.save(nuevoCliente);
+        return convertirADTO(guardado);
+    }
+
+    private ClienteDTO convertirADTO(Cliente cliente) {
+        ClienteDTO dto = new ClienteDTO();
+        dto.setId(cliente.getId());
+        dto.setRut(cliente.getRut());
+        dto.setNombre(cliente.getNombre());
+        dto.setEmail(cliente.getEmail());
+        return dto;
+    }
 }

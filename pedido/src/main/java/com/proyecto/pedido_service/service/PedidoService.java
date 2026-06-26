@@ -3,6 +3,7 @@ package com.proyecto.pedido_service.service;
 import com.proyecto.pedido_service.DTO.PedidoDTO;
 import com.proyecto.pedido_service.model.Pedido;
 import com.proyecto.pedido_service.repository.PedidoRepository;
+import com.proyecto.pedido_service.validaciones.PedidoValidaciones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,8 @@ public class PedidoService {
     @Autowired
     private PedidoRepository repository;
 
-    @Autowired  
-    private ClienteValidaciones clienteValidaciones;
+    @Autowired
+    private PedidoValidaciones pedidoValidaciones;
 
     public List<PedidoDTO> obtenerTodos() {
         List<PedidoDTO> listaDTOs = new ArrayList<>();
@@ -40,8 +41,10 @@ public class PedidoService {
     private PedidoDTO convertirADTO(Pedido pedido) {
         PedidoDTO dto = new PedidoDTO();
         dto.setId(pedido.getId());
-        dto.setEstado(pedido.getEstado()); // Copiamos el estado
-        dto.setCliente(clienteValidaciones.obtenerCliente(pedido.getIdCliente())); // Usamos el getter correcto
+        dto.setEstado(pedido.getEstado());
+
+        dto.setCliente(pedidoValidaciones.validarYObtenerCliente(pedido.getIdCliente()));
+
         return dto;
     }
 }

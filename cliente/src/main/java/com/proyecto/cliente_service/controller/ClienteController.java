@@ -1,30 +1,48 @@
 package com.proyecto.cliente_service.controller;
 
+import com.proyecto.cliente_service.DTO.ClienteDTO;
 import com.proyecto.cliente_service.model.Cliente;
 import com.proyecto.cliente_service.service.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/clientes")
+@Tag(name = "Clientes", description = "Gestión de los clientes del sistema")
 public class ClienteController {
+
+    @Autowired
+    private ClienteService service;
+
     @GetMapping
-    public List<Cliente> listarTodos() { return service.obtenerTodos(); }
+    @Operation(summary = "Obtener todos los clientes")
+    public List<ClienteDTO> listarTodos() {
+        return service.obtenerTodos();
+    }
 
     @GetMapping("/{id}")
-    public EntityModel<Cliente> obtenerCliente(@PathVariable Integer id) {
-        Cliente cliente = service.buscarPorId(id);
-        return EntityModel.of(cliente,
+    @Operation(summary = "Obtener cliente por ID con enlaces HATEOAS")
+    public EntityModel<ClienteDTO> obtenerCliente(@PathVariable Integer id) {
+        ClienteDTO dto = service.buscarPorId(id);
+
+        return EntityModel.of(dto,
                 linkTo(methodOn(ClienteController.class).obtenerCliente(id)).withSelfRel(),
-                linkTo(methodOn(ClienteController.class).listarTodos()).withRel("todos")
+                linkTo(methodOn(ClienteController.class).listarTodos()).withRel("todos-los-clientes")
         );
     }
 
     @PostMapping
-    public Cliente crearCliente(@RequestBody Cliente cliente) { return service.guardar(cliente); }
+    @Operation(summary = "Crear un nuevo cliente")
+    public ClienteDTO crearCliente(@RequestBody Cliente cliente) {
+        return service.guardar(cliente);
+    }
 }
 
