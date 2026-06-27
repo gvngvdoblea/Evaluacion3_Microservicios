@@ -3,25 +3,30 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for picking" enabled="true">
+      <profile name="Annotation profile for evaluacion3" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
-        <module name="pedido" />
-        <module name="cliente" />
-        <module name="picking" />
-        <module name="operario" />
-        <module name="despacho" />
+        <module name="evaluacion3" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="cliente" target="17" />
+      <module name="despacho" target="17" />
+      <module name="operario" target="17" />
+      <module name="pedido" target="17" />
+      <module name="picking" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="cliente" options="-parameters" />
       <module name="despacho" options="-parameters" />
+      <module name="evaluacion3" options="-parameters" />
       <module name="operario" options="-parameters" />
       <module name="pedido" options="-parameters" />
       <module name="picking" options="-parameters" />
