@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: evaluacion3-service
+              uri: lb://evaluacion3
+              predicates:
+                - Path=/api/v1/clientes/**, /api/v1/operarios/**, /api/v1/despachos/**, /api/v1/pedidos/**, /api/v1/pickings/**, /evaluacion3/api-docs/**
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+    urls:
+      - name: Microservicio Evaluacion3
+        url: /evaluacion3/api-docs
+  api-docs:
+    enabled: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
